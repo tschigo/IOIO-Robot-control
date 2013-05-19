@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Testzone</string>
+    <string name="state">State</string>
+    <string name="info">Sensor</string>
+    <string name="button">Button</string>
+    <string name="button1">Forward</string>
+    <string name="button2">Rotate</string>
+    <string name="button3">Hand up</string>
+    <string name="button4">Hand down</string>
+    <string name="button5">Stop</string>
+    <string name="button6">Back</string>
+    <string name="button7">TEST</string>
+    <string name="button8"></string>
+
+</resources>
