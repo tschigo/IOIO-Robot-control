@@ -16,32 +16,33 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class RobotActivity extends IOIOActivity {
 
 	private NervHub data;
 
-	private Button button_0;
 	private Button button_1;
 	private Button button_2;
 	private Button button_3;
 	private Button button_4;
 	private Button button_5;
 	private Button button_6;
-	private Button button_7;
 	private TextView tv_1;
 	private TextView tv_2;
 	private TextView tv_3;
 	private TextView tv_4;
 	private TextView tv_5;
 	private TextView tv_6;
-
+	private EditText et_1;
 	// looper sensor info
 	String analog[] = new String[9];
 	short xPos;
 	short yPos;
 	short anglePos;
+
+	int increment = 1;
 
 	public RobotActivity() {
 		data = NervHub.getInstance();
@@ -51,88 +52,77 @@ public class RobotActivity extends IOIOActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-
-		// Play song :D
-		MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.haisoundtrack);
-		mediaPlayer.start();
-
+		et_1 = (EditText) findViewById(R.id.editText1);
 		tv_1 = (TextView) findViewById(R.id.textView1);
-		tv_1.setText(data.getCb() + "");
 		tv_2 = (TextView) findViewById(R.id.textView2);
 		tv_3 = (TextView) findViewById(R.id.textView3);
 		tv_4 = (TextView) findViewById(R.id.textView4);
 		tv_5 = (TextView) findViewById(R.id.textView5);
 		tv_6 = (TextView) findViewById(R.id.textView6);
+		button_1 = (Button) findViewById(R.id.button1);
+		button_2 = (Button) findViewById(R.id.button2);
+		button_3 = (Button) findViewById(R.id.button3);
+		button_4 = (Button) findViewById(R.id.button4);
+		button_5 = (Button) findViewById(R.id.button5);
+		button_6 = (Button) findViewById(R.id.button6);
 
-		button_0 = (Button) findViewById(R.id.button1);
-		button_0.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				data.setCb(State.Advance);
-				tv_1.setText(data.getCb() + "");
-				update();
-
-			}
-		});
-		button_1 = (Button) findViewById(R.id.button2);
 		button_1.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				data.setCb(State.Rotate);
-				tv_1.setText(data.getCb() + "");
-				update();
-			}
-		});
-		button_2 = (Button) findViewById(R.id.button3);
-		button_2.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				data.setCb(State.Capture);
-				tv_1.setText(data.getCb() + "");
-				update();
-			}
-		});
-		button_3 = (Button) findViewById(R.id.button4);
-		button_3.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				data.setCb(State.Free);
-				tv_1.setText(data.getCb() + "");
-				update();
-			}
-		});
-		button_4 = (Button) findViewById(R.id.button5);
-		button_4.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				data.setCb(State.End);
-				tv_1.setText(data.getCb() + "");
+				data.setCb(State.Forward);
 				update();
 			}
 		});
 
-		button_5 = (Button) findViewById(R.id.button6);
-		button_5.setOnClickListener(new View.OnClickListener() {
+		button_2.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				data.setCb(State.Back);
-				tv_1.setText(data.getCb() + "");
 				update();
 			}
 		});
-		button_6 = (Button) findViewById(R.id.button7);
+
+		button_3.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				data.setCb(State.Stop);
+				update();
+			}
+		});
+		button_4.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				data.setCb(State.RotateLeft);
+				update();
+			}
+		});
+		button_5.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				data.setCb(State.RoateRight);
+				update();
+			}
+		});
 		button_6.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				data.setCb(State.Test);
-				tv_1.setText(data.getCb() + "");
+				try{
+					increment = Integer.parseInt(et_1.getText().toString());					
+				} catch (Exception e) {
+					increment = 1;
+				}
+				data.setCb(State.HandDown);
 				update();
+				tv_1.setText(data.getCb() + " - "
+						+ String.valueOf(0.0528f + increment * 0.0005f) + "");
 			}
 		});
-		button_7 = (Button) findViewById(R.id.button8);
-		button_7.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				data.setCb(State.Test);
-				tv_1.setText(data.getCb() + "");
-				update();
-			}
-		});
+
+	}
+
+	public void playMusic() {
+		// Play song :D
+		MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.haisoundtrack);
+		mediaPlayer.start();
+
 	}
 
 	public void update() {
+		tv_1.setText(data.getCb() + "");
 		tv_2.setText("[left wheel] " + analog[8] + " - [right wheel] "
 				+ analog[7]);
 		tv_3.setText("xPos " + xPos + " - yPos " + yPos + " - anglePos "
@@ -246,9 +236,10 @@ public class RobotActivity extends IOIOActivity {
 			robotLED(intensity, intensity);
 		}
 
-		protected void gripper(boolean b) {
+		protected void robotGripper(boolean b) {
 			try {
-				servo_.setDutyCycle(0.0528f);
+//				servo_.setDutyCycle(0.0528f + increment * 0.0005f);
+				servo_.setPulseWidth(0.0528f + increment * 0.0005f);
 			} catch (ConnectionLostException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -313,30 +304,26 @@ public class RobotActivity extends IOIOActivity {
 		@Override
 		public void loop() throws ConnectionLostException {
 			switch (data.getCb()) {
-			case Scan:
-			case Verify:
-				break;
-			case Advance:
-				robotLED(100, 0);
-				robotMove(14, 14);
-				break;
-			case Rotate:
-				robotLED(50, 50);
-				robotMove(14, 7);
-				break;
-			case Capture:
-				gripper(true);
-				break;
-			case Free:
-				gripper(false);
-				break;
-			case End:
-				robotMove(0);
-				robotLED(90);
-				break;
 			case Back:
-				robotLED(0, 100);
-				robotMove(-14);
+				robotMove(-15);
+				break;
+			case Forward:
+				robotMove(15);
+				break;
+			case HandDown:
+			case HandUp:
+				robotGripper(true);
+				break;
+			case RoateRight:
+				robotMove(15, 0);
+				break;
+			case RotateLeft:
+				robotMove(0, 15);
+				break;
+			case Stop:
+				robotMove(0);
+				break;
+			case Test:
 				break;
 			default:
 				break;
@@ -344,6 +331,7 @@ public class RobotActivity extends IOIOActivity {
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
+
 			}
 			robotReadSensor();
 		}

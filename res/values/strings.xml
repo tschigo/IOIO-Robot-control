@@ -2,16 +2,18 @@
 <resources>
 
     <string name="app_name">Testzone</string>
-    <string name="state">State</string>
-    <string name="info">Sensor</string>
     <string name="button">Button</string>
     <string name="button1">Forward</string>
-    <string name="button2">Rotate</string>
-    <string name="button3">Hand up</string>
-    <string name="button4">Hand down</string>
-    <string name="button5">Stop</string>
-    <string name="button6">Back</string>
-    <string name="button7">TEST</string>
-    <string name="button8"></string>
+    <string name="button2">Backward</string>
+    <string name="button3">Stop</string>
+    <string name="button4">left</string>
+    <string name="button5">right</string>
+    <string name="button6">Gripper</string>
+    <string name="button7">Rotate</string>
+    
+    <string name="empty"></string>
+    
+    <string name="value">1</string>
+    
 
 </resources>
