@@ -100,8 +100,8 @@ public class RobotActivity extends IOIOActivity {
         });
         button_6.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                try{
-                    increment = Integer.parseInt(et_1.getText().toString());                    
+                try {
+                    increment = Integer.parseInt(et_1.getText().toString());
                 } catch (Exception e) {
                     increment = 1;
                 }
@@ -137,6 +137,7 @@ public class RobotActivity extends IOIOActivity {
         private TwiMaster twi;
         private NervHub data;
         private PwmOutput servo_;
+        int helpGrippter = 10;
 
         @Override
         protected void setup() throws ConnectionLostException {
@@ -145,6 +146,11 @@ public class RobotActivity extends IOIOActivity {
             data = NervHub.getInstance();
         }
 
+        /**
+         * robot forward in cm
+         * 
+         * @param fwd
+         */
         protected void robotForward(int fwd) {
             byte[] request = new byte[2];
             byte[] response = new byte[1];
@@ -168,6 +174,11 @@ public class RobotActivity extends IOIOActivity {
             robotForward((int) fwd);
         }
 
+        /**
+         * robot rotate in grad
+         * 
+         * @param grad
+         */
         protected void robotRotate(int grad) {
             byte[] request = new byte[2];
             byte[] response = new byte[1];
@@ -189,6 +200,13 @@ public class RobotActivity extends IOIOActivity {
             robotRotate((int) grad);
         }
 
+        /**
+         * move robot, speaks directly with motor(rotate and forward) int
+         * between 0 and 16, more not tested
+         * 
+         * @param leftMotorSpeed
+         * @param rightMotorSpeed
+         */
         protected void robotMove(int leftMotorSpeed, int rightMotorSpeed) {
             byte[] request = new byte[3];
             byte[] response = new byte[1];
@@ -212,6 +230,12 @@ public class RobotActivity extends IOIOActivity {
             robotMove(speed, speed);
         }
 
+        /**
+         * robot Led control
+         * 
+         * @param blueLED
+         * @param redLED
+         */
         protected void robotLED(int blueLED, int redLED) {
             byte[] request = new byte[3];
             byte[] response = new byte[1];
@@ -243,9 +267,10 @@ public class RobotActivity extends IOIOActivity {
             servo_.setDutyCycle(0.0528f + 0 * 0.0005f);
         }
 
-        
-        
-        int helpGrippter = 10;
+        /**
+         * 
+         * @param b
+         */
         protected void robotGripper(boolean b) {
             if (b)
                 try {
@@ -267,6 +292,9 @@ public class RobotActivity extends IOIOActivity {
                 }
         }
 
+        /**
+         * read sensors information
+         */
         protected void robotReadSensor() {
             byte[] request = new byte[] { 0x10 };
             byte[] response = new byte[8];
